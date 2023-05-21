@@ -15,6 +15,7 @@
 		D8C20D382A1A841700468C92 /* MessageThingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D372A1A841700468C92 /* MessageThingTests.swift */; };
 		D8C20D422A1A841700468C92 /* MessageThingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D412A1A841700468C92 /* MessageThingUITests.swift */; };
 		D8C20D442A1A841700468C92 /* MessageThingUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D432A1A841700468C92 /* MessageThingUITestsLaunchTests.swift */; };
+		D8C20D512A1A89AF00468C92 /* MessageDb.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D502A1A89AF00468C92 /* MessageDb.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		D8C20D3D2A1A841700468C92 /* MessageThingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageThingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8C20D412A1A841700468C92 /* MessageThingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageThingUITests.swift; sourceTree = "<group>"; };
 		D8C20D432A1A841700468C92 /* MessageThingUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageThingUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		D8C20D502A1A89AF00468C92 /* MessageDb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDb.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				D8C20D2B2A1A841700468C92 /* Main.storyboard */,
 				D8C20D2E2A1A841700468C92 /* MessageThing.entitlements */,
 				D8C20D262A1A841200468C92 /* MessageThing.xcdatamodeld */,
+				D8C20D502A1A89AF00468C92 /* MessageDb.swift */,
 			);
 			path = MessageThing;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8C20D282A1A841200468C92 /* MessageThing.xcdatamodeld in Sources */,
+				D8C20D512A1A89AF00468C92 /* MessageDb.swift in Sources */,
 				D8C20D252A1A841200468C92 /* ViewController.swift in Sources */,
 				D8C20D232A1A841200468C92 /* AppDelegate.swift in Sources */,
 			);

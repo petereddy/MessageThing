@@ -10,11 +10,32 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-  
-
+//  private var window: NSWindow!
+  private var statusItem: NSStatusItem!
 
   func applicationDidFinishLaunching(_ aNotification: Notification) {
-    // Insert code here to initialize your application
+    //    window = NSWindow(
+    //      contentRect: NSRect(x: 0, y: 0, width: 480, height: 270),
+    //      styleMask: [.miniaturizable, .closable, .resizable, .titled],
+    //      backing: .buffered, defer: false)
+    //    window.center()
+    //    window.title = "Message Thing"
+    //    window.makeKeyAndOrderFront(nil)
+    
+    statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    if let button = statusItem.button {
+      if #available(macOS 11.0, *) {
+        button.image = NSImage(systemSymbolName: "1.circle",
+                               accessibilityDescription: "1")
+      } else {
+        // Fallback on earlier versions
+      }
+    }
+    
+    let texts = MessageDb().getUnreadTexts()
+    texts?.forEach { row in
+      print(row)
+    }
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {
