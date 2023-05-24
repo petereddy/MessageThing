@@ -15,10 +15,13 @@ enum SQLiteError: Error {
   case Bind(message: String)
 }
 
-class MessageDb {
+struct MessageData {
+  let message: String
+  let date: Int64
+}
 
+class MessageDb {
   var dbPath = "/Users/petere/work/messages/chat.db"
-  
 
   func errorMessage(db: OpaquePointer) -> String {
     if let errorPointer = sqlite3_errmsg(db) {
@@ -64,14 +67,25 @@ class MessageDb {
     })
   }
   
-  func getUnreadTexts() -> [String]? {
-    let messageQuery = "SELECT text from message;"
-    var result = [String]()
-
+  func getUnreadTexts() -> [MessageData]? {
+    let date = Date(timeIntervalSinceNow: -240)
+    let messageQuery = """
+      SELECT
+        text,
+        date
+      FROM message
+      WHERE date > \(date.timeIntervalSince1970)
+      ORDER BY date;
+      """
+    var result = [MessageData]()
+  
     withQuery(query: messageQuery, fn:{ q in
       while sqlite3_step(q) == SQLITE_ROW {
         if let msg = sqlite3_column_text(q, 0) {
-          result.append(String(cString: msg))
+          result.append(
+            MessageData(message: String(cString: msg),
+                        date: sqlite3_column_int64(q, 1))
+          )
         }
       }
     })
