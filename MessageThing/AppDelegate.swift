@@ -36,6 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     texts?.forEach { row in
       print(row)
     }
+    print("Message count: \(String(describing: texts?.count))")
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {

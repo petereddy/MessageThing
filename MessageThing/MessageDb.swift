@@ -18,6 +18,7 @@ enum SQLiteError: Error {
 struct MessageData {
   let message: String
   let date: Int64
+  let attributedString: NSAttributedString?
 }
 
 class MessageDb {
@@ -74,7 +75,7 @@ class MessageDb {
         text,
         date
       FROM message
-      WHERE date > \(date.timeIntervalSince1970)
+      -- WHERE date > \(date.timeIntervalSince1970)
       ORDER BY date;
       """
     var result = [MessageData]()
@@ -84,7 +85,8 @@ class MessageDb {
         if let msg = sqlite3_column_text(q, 0) {
           result.append(
             MessageData(message: String(cString: msg),
-                        date: sqlite3_column_int64(q, 1))
+                        date: sqlite3_column_int64(q, 1),
+                        attributedString: nil)
           )
         }
       }
