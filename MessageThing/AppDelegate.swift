@@ -32,7 +32,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
     
-    let texts = MessageDb().getUnreadTexts()
+    let mdb = MessageDb()
+    let texts = mdb?.readMessages()
     texts?.forEach { row in
       print(row)
     }
