@@ -6,55 +6,92 @@
 //
 
 import Foundation
-import GRDB
+import SQLite3
 
-public struct Message {
-  let text: String?
-  let date: Int64?
-//  let attributedString: NSAttributedString?
-  static let query = """
-        SELECT
-          text,
-          date
-        FROM message
-        ORDER BY date;
-        """
+enum SQLiteError: Error {
+  case OpenDatabase(message: String)
+  case Prepare(message: String)
+  case Step(message: String)
+  case Bind(message: String)
 }
 
-extension Message: Codable, FetchableRecord, MutablePersistableRecord { }
+struct MessageData {
+  let message: String
+  let date: Int64
+  let attributedString: NSAttributedString?
+}
 
 class MessageDb {
-  let dbPath: String
-  var dbQueue: DatabaseQueue
-  
-  // "/Users/petere/Library/Messages/chat.db"
+  var dbPath = "/Users/petere/work/messages/chat.db"
 
-  init?(dbPath: String = "/Users/petere/work/messages/chat.db") {
-    self.dbPath = dbPath
+  func errorMessage(db: OpaquePointer) -> String {
+    if let errorPointer = sqlite3_errmsg(db) {
+      return String(cString: errorPointer)
+    }
+    return "No Error"
+  }
+
+  func withDb<T>(fn: (OpaquePointer) -> T?) -> T? {
+    var db: OpaquePointer?
     
-    var config = Configuration()
-    config.readonly = true
-    config.maximumReaderCount = 2
-    #if DEBUG
-    config.publicStatementArguments = true
-    #endif
+    let dbResult = sqlite3_open(dbPath, &db)
+    defer {
+      sqlite3_close(db)
+    }
+    if (dbResult == SQLITE_OK) {
+      print("Opened db at \(dbPath)")
+      return fn(db!)
+    }
+    if let errorPointer = sqlite3_errmsg(db) {
+      let message = String(cString: errorPointer)
+      print("Couldn't open db \(dbPath), error: \(message)")
+    }
+    else {
+      print("Couldn't open db \(dbPath), error: \(dbResult)")
+    }
+    return nil
+  }
 
-    do {
-      try self.dbQueue = DatabaseQueue(path: dbPath, configuration: config)
-    }
-    catch {
-      return nil
-    }
+  func withQuery<T>(query: String, fn: (OpaquePointer) -> T?) -> T? {
+    var queryStatement: OpaquePointer?
+    
+    return withDb(fn: { db in
+      var result: T?
+      if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
+        result = fn(queryStatement!)
+      }
+      defer {
+        sqlite3_finalize(queryStatement)
+      }
+      print(errorMessage(db: db))
+      return result
+    })
   }
   
-  func readMessages() -> [Message] {
-    do {
-      return try dbQueue.read { db in
-        try Message.fetchAll(db)
+  func getUnreadTexts() -> [MessageData]? {
+    let date = Date(timeIntervalSinceNow: -240)
+    let messageQuery = """
+      SELECT
+        text,
+        date
+      FROM message
+      -- WHERE date > \(date.timeIntervalSince1970)
+      ORDER BY date;
+      """
+    var result = [MessageData]()
+  
+    withQuery(query: messageQuery, fn:{ q in
+      while sqlite3_step(q) == SQLITE_ROW {
+        if let msg = sqlite3_column_text(q, 0) {
+          result.append(
+            MessageData(message: String(cString: msg),
+                        date: sqlite3_column_int64(q, 1),
+                        attributedString: nil)
+          )
+        }
       }
-    }
-    catch {
-      return []
-    }
+    })
+
+    return result
   }
 }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D82F89832A37BD7A00E4085A /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = D82F89822A37BD7A00E4085A /* GRDB */; };
 		D8C20D232A1A841200468C92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D222A1A841200468C92 /* AppDelegate.swift */; };
 		D8C20D252A1A841200468C92 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D242A1A841200468C92 /* ViewController.swift */; };
 		D8C20D282A1A841200468C92 /* MessageThing.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D262A1A841200468C92 /* MessageThing.xcdatamodeld */; };
@@ -17,6 +16,7 @@
 		D8C20D422A1A841700468C92 /* MessageThingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D412A1A841700468C92 /* MessageThingUITests.swift */; };
 		D8C20D442A1A841700468C92 /* MessageThingUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D432A1A841700468C92 /* MessageThingUITestsLaunchTests.swift */; };
 		D8C20D512A1A89AF00468C92 /* MessageDb.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D502A1A89AF00468C92 /* MessageDb.swift */; };
+		D8C20D542A1AFAEA00468C92 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = D8C20D532A1AFAEA00468C92 /* SQLite */; };
 		D8C20D562A1AFB7800468C92 /* ChatDb.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D552A1AFB7800468C92 /* ChatDb.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D82F89832A37BD7A00E4085A /* GRDB in Frameworks */,
+				D8C20D542A1AFAEA00468C92 /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,7 +149,7 @@
 			);
 			name = MessageThing;
 			packageProductDependencies = (
-				D82F89822A37BD7A00E4085A /* GRDB */,
+				D8C20D532A1AFAEA00468C92 /* SQLite */,
 			);
 			productName = MessageThing;
 			productReference = D8C20D1F2A1A841200468C92 /* MessageThing.app */;
@@ -224,7 +224,7 @@
 			);
 			mainGroup = D8C20D162A1A841200468C92;
 			packageReferences = (
-				D82F89812A37BD7A00E4085A /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				D8C20D522A1AFAEA00468C92 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 			);
 			productRefGroup = D8C20D202A1A841200468C92 /* Products */;
 			projectDirPath = "";
@@ -595,21 +595,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D82F89812A37BD7A00E4085A /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+		D8C20D522A1AFAEA00468C92 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.14.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D82F89822A37BD7A00E4085A /* GRDB */ = {
+		D8C20D532A1AFAEA00468C92 /* SQLite */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D82F89812A37BD7A00E4085A /* XCRemoteSwiftPackageReference "GRDB.swift" */;
-			productName = GRDB;
+			package = D8C20D522A1AFAEA00468C92 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
 		};
 /* End XCSwiftPackageProductDependency section */
 
