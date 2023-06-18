@@ -31,15 +31,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Fallback on earlier versions
       }
     }
-    
+
     do {
-      let texts = try MessageDb().getUnreadTexts()
-      for text in texts {
-        print(text)
+      let db = try MessageDb()
+      
+      do {
+        let texts = try db.getUnreadTexts()
+        for text in texts {
+          print(text)
+        }
+      }
+      catch {
+        print("oops")
+      }
+      
+      do {
+        let texts = try db.getUnreadTexts()
+        for text in texts {
+          print(text)
+        }
+      }
+      catch {
+        print("oops")
       }
     }
     catch {
-      print("oops")
+      print("oops failed")
     }
   }
 
