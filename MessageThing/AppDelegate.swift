@@ -32,11 +32,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       }
     }
     
-    let texts = MessageDb().getUnreadTexts()
-    texts?.forEach { row in
-      print(row)
+    do {
+      let texts = try MessageDb().getUnreadTexts()
+      for text in texts {
+        print(text)
+      }
     }
-    print("Message count: \(String(describing: texts?.count))")
+    catch {
+      print("oops")
+    }
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {

@@ -6,92 +6,36 @@
 //
 
 import Foundation
-import SQLite3
+import SQLite
 
-enum SQLiteError: Error {
-  case OpenDatabase(message: String)
-  case Prepare(message: String)
-  case Step(message: String)
-  case Bind(message: String)
-}
+struct Message {
+  static let table = Table("message")
+  static let textField = Expression<String?>("text")
+  static let dateField = Expression<Int64>("date")
 
-struct MessageData {
-  let message: String
+  let message: String?
   let date: Int64
-  let attributedString: NSAttributedString?
 }
 
 class MessageDb {
-  var dbPath = "/Users/petere/work/messages/chat.db"
+  var dbPath: String
+  var db: Connection
 
-  func errorMessage(db: OpaquePointer) -> String {
-    if let errorPointer = sqlite3_errmsg(db) {
-      return String(cString: errorPointer)
-    }
-    return "No Error"
+  init(dbPath: String = "/Users/petere/work/messages/chat.db") throws {
+    self.dbPath = dbPath
+    self.db = try Connection(dbPath)
   }
 
-  func withDb<T>(fn: (OpaquePointer) -> T?) -> T? {
-    var db: OpaquePointer?
-    
-    let dbResult = sqlite3_open(dbPath, &db)
-    defer {
-      sqlite3_close(db)
-    }
-    if (dbResult == SQLITE_OK) {
-      print("Opened db at \(dbPath)")
-      return fn(db!)
-    }
-    if let errorPointer = sqlite3_errmsg(db) {
-      let message = String(cString: errorPointer)
-      print("Couldn't open db \(dbPath), error: \(message)")
-    }
-    else {
-      print("Couldn't open db \(dbPath), error: \(dbResult)")
-    }
-    return nil
-  }
+  func getUnreadTexts() throws -> [Message] {
 
-  func withQuery<T>(query: String, fn: (OpaquePointer) -> T?) -> T? {
-    var queryStatement: OpaquePointer?
-    
-    return withDb(fn: { db in
-      var result: T?
-      if sqlite3_prepare_v2(db, query, -1, &queryStatement, nil) == SQLITE_OK {
-        result = fn(queryStatement!)
-      }
-      defer {
-        sqlite3_finalize(queryStatement)
-      }
-      print(errorMessage(db: db))
-      return result
-    })
-  }
-  
-  func getUnreadTexts() -> [MessageData]? {
-    let date = Date(timeIntervalSinceNow: -240)
-    let messageQuery = """
-      SELECT
-        text,
-        date
-      FROM message
-      -- WHERE date > \(date.timeIntervalSince1970)
-      ORDER BY date;
-      """
-    var result = [MessageData]()
-  
-    withQuery(query: messageQuery, fn:{ q in
-      while sqlite3_step(q) == SQLITE_ROW {
-        if let msg = sqlite3_column_text(q, 0) {
-          result.append(
-            MessageData(message: String(cString: msg),
-                        date: sqlite3_column_int64(q, 1),
-                        attributedString: nil)
-          )
-        }
-      }
-    })
+    let q = Message.table
+      .select(Message.textField, Message.dateField)
+      .order(Message.dateField.desc)
 
-    return result
+    let iter = try db.prepareRowIterator(q)
+    return try iter.map { msg in
+      Message(message: msg[Message.textField],
+              date: msg[Message.dateField])
+    }
   }
 }
