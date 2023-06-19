@@ -38,20 +38,19 @@ struct Message {
 
   let message: String?
   let date: Int64
-  let attributedBody: NSAttributedString?
 }
 
 class MessageDb {
   var dbPath: String
   var db: Connection
-  var lastDateRead: Int64 = 0
+  var lastMessageDate: Int64 = 0
   
   init(dbPath: String = "/Users/petere/work/messages/chat.db") throws {
     self.dbPath = dbPath
     self.db = try Connection(dbPath)
   }
   
-  func unarchive(data: Data?) -> NSAttributedString? {
+  func unarchive(data: Data?) -> String? {
     guard let data = data else {
       return nil
     }
@@ -59,37 +58,31 @@ class MessageDb {
     do {
       if let obj = try NSUnarchiver.unarchiveObject(with: data) {
         if let str = obj as? NSAttributedString {
-          return str
+          return str.string
         }
       }
-    }
-    catch {
-      print("Decode error: \(error)")
     }
     
     return nil
   }
 
-  func getUnreadTexts() throws -> [Message] {
+  func getUnreadMessages() throws -> [Message] {
 
     let query = Message.table
-//      .select(Message.textField, Message.dateField)
-      .where((Message.dateField > lastDateRead) && (Message.isFromMe == 0))
+      .select(Message.textField, Message.dateField, Message.attributedBodyField)
+      .where((Message.dateField > lastMessageDate) && (Message.isFromMe == 0))
       .order(Message.dateField.asc)
 
     let iter = try db.prepareRowIterator(query)
 
     let messages = try iter.map { msg in
-//      let text = unarchive(
-//        data: msg[Message.attributedBodyField])?.string ?? msg[Message.textField])
-      Message(message: msg[Message.textField],
-              date: msg[Message.dateField],
-              attributedBody: unarchive(data: msg[Message.attributedBodyField]))
+      let text = unarchive(data: msg[Message.attributedBodyField]) ?? msg[Message.textField]
+      return Message(message: text, date: msg[Message.dateField])
     }
 
     if !messages.isEmpty {
       if let lastdate = messages.last?.date {
-        lastDateRead = lastdate
+        self.lastMessageDate = lastdate
       }
     }
     

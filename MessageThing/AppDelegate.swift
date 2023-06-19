@@ -36,10 +36,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       let db = try MessageDb()
       
       do {
-        let texts = try db.getUnreadTexts()
+        let texts = try db.getUnreadMessages()
         for text in texts {
-//          print(text)
-          print(text.attributedBody?.string)
+          print(text)
+//          print(text.attributedBody?.string)
         }
       }
       catch {
@@ -47,7 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       }
       
       do {
-        let texts = try db.getUnreadTexts()
+        let texts = try db.getUnreadMessages()
         for text in texts {
           print(text)
         }
