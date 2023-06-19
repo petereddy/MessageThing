@@ -12,6 +12,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 //  private var window: NSWindow!
   private var statusItem: NSStatusItem!
+  private var db: MessageDb?
 
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     //    window = NSWindow(
@@ -33,41 +34,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     do {
-      let db = try MessageDb()
-      db.startPolling()
+      self.db = try MessageDb()
+      self.db?.startPolling()
     }
     catch {
       print("Can't open messages: \(error)")
     }
-//
-//      do {
-//        let texts = try db.getUnreadMessages()
-//        for text in texts {
-//          print(text)
-////          print(text.attributedBody?.string)
-//        }
-//      }
-//      catch {
-//        print("oops")
-//      }
-//
-//      do {
-//        let texts = try db.getUnreadMessages()
-//        for text in texts {
-//          print(text)
-//        }
-//      }
-//      catch {
-//        print("oops")
-//      }
-//    }
-//    catch {
-//      print("oops failed")
-//    }
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {
     // Insert code here to tear down your application
+    self.db?.stopPolling()
   }
 
   func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

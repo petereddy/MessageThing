@@ -96,6 +96,9 @@ class MessageDb {
   }
 
   func startPolling() {
+
+    stopPolling()
+
     let _ = getUnreadMessages()
     
     self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
@@ -105,5 +108,9 @@ class MessageDb {
       }
     }
   }
-
+  
+  func stopPolling() {
+    timer?.invalidate()
+    timer = nil
+  }
 }
