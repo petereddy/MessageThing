@@ -45,9 +45,9 @@ class MessageDb {
   var db: Connection
   var lastMessageDate: Int64 = 0
   
-  init(dbPath: String = "/Users/petere/work/messages/chat.db") throws {
+  init(dbPath: String = "/Users/petere/Library/Messages/chat.db") throws {
     self.dbPath = dbPath
-    self.db = try Connection(dbPath)
+    self.db = try Connection(dbPath, readonly: true)
   }
   
   func unarchive(data: Data?) -> String? {

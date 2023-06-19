@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D80BEEE82A40C83C00EB466D /* AccessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80BEEE72A40C83C00EB466D /* AccessManager.swift */; };
 		D8C20D232A1A841200468C92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D222A1A841200468C92 /* AppDelegate.swift */; };
 		D8C20D252A1A841200468C92 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D242A1A841200468C92 /* ViewController.swift */; };
 		D8C20D282A1A841200468C92 /* MessageThing.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D8C20D262A1A841200468C92 /* MessageThing.xcdatamodeld */; };
@@ -38,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D80BEEE72A40C83C00EB466D /* AccessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessManager.swift; sourceTree = "<group>"; };
+		D80BEEE92A40C9DD00EB466D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D8C20D1F2A1A841200468C92 /* MessageThing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MessageThing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8C20D222A1A841200468C92 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8C20D242A1A841200468C92 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 		D8C20D212A1A841200468C92 /* MessageThing */ = {
 			isa = PBXGroup;
 			children = (
+				D80BEEE92A40C9DD00EB466D /* Info.plist */,
 				D8C20D222A1A841200468C92 /* AppDelegate.swift */,
 				D8C20D242A1A841200468C92 /* ViewController.swift */,
 				D8C20D292A1A841700468C92 /* Assets.xcassets */,
@@ -111,6 +115,7 @@
 				D8C20D262A1A841200468C92 /* MessageThing.xcdatamodeld */,
 				D8C20D502A1A89AF00468C92 /* MessageDb.swift */,
 				D8C20D552A1AFB7800468C92 /* ChatDb.swift */,
+				D80BEEE72A40C83C00EB466D /* AccessManager.swift */,
 			);
 			path = MessageThing;
 			sourceTree = "<group>";
@@ -271,6 +276,7 @@
 				D8C20D282A1A841200468C92 /* MessageThing.xcdatamodeld in Sources */,
 				D8C20D512A1A89AF00468C92 /* MessageDb.swift in Sources */,
 				D8C20D252A1A841200468C92 /* ViewController.swift in Sources */,
+				D80BEEE82A40C83C00EB466D /* AccessManager.swift in Sources */,
 				D8C20D232A1A841200468C92 /* AppDelegate.swift in Sources */,
 				D8C20D562A1AFB7800468C92 /* ChatDb.swift in Sources */,
 			);
@@ -446,9 +452,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MessageThing/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSSystemExtensionUsageDescription = "MessageThing requires full file system access to read your messages";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -473,9 +481,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MessageThing/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_NSSystemExtensionUsageDescription = "MessageThing requires full file system access to read your messages";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
