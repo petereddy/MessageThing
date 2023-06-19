@@ -55,11 +55,9 @@ class MessageDb {
       return nil
     }
 
-    do {
-      if let obj = try NSUnarchiver.unarchiveObject(with: data) {
-        if let str = obj as? NSAttributedString {
-          return str.string
-        }
+    if let obj = NSUnarchiver.unarchiveObject(with: data) {
+      if let str = obj as? NSAttributedString {
+        return str.string
       }
     }
     
