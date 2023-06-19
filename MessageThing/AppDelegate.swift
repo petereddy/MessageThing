@@ -34,31 +34,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     do {
       let db = try MessageDb()
-      
-      do {
-        let texts = try db.getUnreadMessages()
-        for text in texts {
-          print(text)
-//          print(text.attributedBody?.string)
-        }
-      }
-      catch {
-        print("oops")
-      }
-      
-      do {
-        let texts = try db.getUnreadMessages()
-        for text in texts {
-          print(text)
-        }
-      }
-      catch {
-        print("oops")
-      }
+      db.startPolling()
     }
     catch {
-      print("oops failed")
+      print("Can't open messages: \(error)")
     }
+//
+//      do {
+//        let texts = try db.getUnreadMessages()
+//        for text in texts {
+//          print(text)
+////          print(text.attributedBody?.string)
+//        }
+//      }
+//      catch {
+//        print("oops")
+//      }
+//
+//      do {
+//        let texts = try db.getUnreadMessages()
+//        for text in texts {
+//          print(text)
+//        }
+//      }
+//      catch {
+//        print("oops")
+//      }
+//    }
+//    catch {
+//      print("oops failed")
+//    }
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {

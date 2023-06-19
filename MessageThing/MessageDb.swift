@@ -44,6 +44,7 @@ class MessageDb {
   var dbPath: String
   var db: Connection
   var lastMessageDate: Int64 = 0
+  var timer: Timer?
   
   init(dbPath: String = "/Users/petere/Library/Messages/chat.db") throws {
     self.dbPath = dbPath
@@ -64,26 +65,45 @@ class MessageDb {
     return nil
   }
 
-  func getUnreadMessages() throws -> [Message] {
+  func getUnreadMessages() -> [Message] {
 
     let query = Message.table
       .select(Message.textField, Message.dateField, Message.attributedBodyField)
       .where((Message.dateField > lastMessageDate) && (Message.isFromMe == 0))
       .order(Message.dateField.asc)
 
-    let iter = try db.prepareRowIterator(query)
-
-    let messages = try iter.map { msg in
-      let text = unarchive(data: msg[Message.attributedBodyField]) ?? msg[Message.textField]
-      return Message(message: text, date: msg[Message.dateField])
-    }
-
-    if !messages.isEmpty {
-      if let lastdate = messages.last?.date {
-        self.lastMessageDate = lastdate
+    do {
+      let iter = try db.prepareRowIterator(query)
+      
+      let messages = try iter.map { msg in
+        let text = unarchive(data: msg[Message.attributedBodyField]) ?? msg[Message.textField]
+        return Message(message: text, date: msg[Message.dateField])
       }
+      
+      if !messages.isEmpty {
+        if let lastdate = messages.last?.date {
+          self.lastMessageDate = lastdate
+        }
+      }
+      
+      return messages
+    }
+    catch {
+      print("Error fetching messages: \(error)")
     }
     
-    return messages
+    return []
   }
+
+  func startPolling() {
+    let _ = getUnreadMessages()
+    
+    self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+      let messages = self.getUnreadMessages()
+      for message in messages {
+        print(message)
+      }
+    }
+  }
+
 }
