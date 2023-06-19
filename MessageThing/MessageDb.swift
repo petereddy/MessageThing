@@ -34,7 +34,7 @@ struct Message {
   static let textField = Expression<String?>("text")
   static let dateField = Expression<Int64>("date")
   static let isFromMe = Expression<Int>("is_from_me")
-  static let attributedBodyField = Expression<NSAttributedString?>("attributedBody")
+  static let attributedBodyField = Expression<Data?>("attributedBody")
 
   let message: String?
   let date: Int64
@@ -45,10 +45,29 @@ class MessageDb {
   var dbPath: String
   var db: Connection
   var lastDateRead: Int64 = 0
-
+  
   init(dbPath: String = "/Users/petere/work/messages/chat.db") throws {
     self.dbPath = dbPath
     self.db = try Connection(dbPath)
+  }
+  
+  func unarchive(data: Data?) -> NSAttributedString? {
+    guard let data = data else {
+      return nil
+    }
+
+    do {
+      if let obj = try NSUnarchiver.unarchiveObject(with: data) {
+        if let str = obj as? NSAttributedString {
+          return str
+        }
+      }
+    }
+    catch {
+      print("Decode error: \(error)")
+    }
+    
+    return nil
   }
 
   func getUnreadTexts() throws -> [Message] {
@@ -61,17 +80,17 @@ class MessageDb {
     let iter = try db.prepareRowIterator(query)
 
     let messages = try iter.map { msg in
+//      let text = unarchive(
+//        data: msg[Message.attributedBodyField])?.string ?? msg[Message.textField])
       Message(message: msg[Message.textField],
               date: msg[Message.dateField],
-              attributedBody: msg[Message.attributedBodyField])
+              attributedBody: unarchive(data: msg[Message.attributedBodyField]))
     }
 
-    if messages.isEmpty {
-      return []
-    }
-
-    if let lastdate = messages.last?.date {
-      lastDateRead = lastdate
+    if !messages.isEmpty {
+      if let lastdate = messages.last?.date {
+        lastDateRead = lastdate
+      }
     }
     
     return messages

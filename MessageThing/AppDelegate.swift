@@ -38,7 +38,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       do {
         let texts = try db.getUnreadTexts()
         for text in texts {
-          print(text)
+//          print(text)
+          print(text.attributedBody?.string)
         }
       }
       catch {
